@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>响应式</title>
+</head>
+<body>
+<div id="app">{{name}}</div>
+<button id="addButton">增加</button>
+<script>
+    (function(){
+        document.getElementById("addButton").addEventListener("click", add);
+    })();
+    let obj = {
+        value: 0
+    };
+    function reactive(obj){
+        for(let key in obj){
+            console.log(key);
+            let val = obj[key];
+            Object.defineProperty(obj, key, {
+                enumerable: true,
+                configurable: true,
+                get: ()=>{
+                    console.log("get");
+                    return val;
+                },
+                set: newValue => {
+                    val = newValue;
+                    console.log("set");
+                }
+            })
+        }
+    }
+
+    reactive(obj);
+    function add(){
+        console.log("add");
+        obj.value = obj.value + 1;
+        console.log(obj.value);
+    }
+</script>
+<script type="text/javascript" src="libs/index.js"></script>
+</body>
+</html>
