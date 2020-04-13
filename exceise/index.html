@@ -5,7 +5,7 @@
     <title>响应式</title>
 </head>
 <body>
-<div id="app">{{name}}</div>
+<div id="app"></div>
 <button id="addButton">增加</button>
 <script>
     (function(){
@@ -17,6 +17,7 @@
     function reactive(obj){
         for(let key in obj){
             console.log(key);
+            // 闭包
             let val = obj[key];
             Object.defineProperty(obj, key, {
                 enumerable: true,
@@ -28,6 +29,8 @@
                 set: newValue => {
                     val = newValue;
                     console.log("set");
+                    let ele = document.getElementById("app");
+                    ele.innerText = val;
                 }
             })
         }
@@ -35,9 +38,7 @@
 
     reactive(obj);
     function add(){
-        console.log("add");
         obj.value = obj.value + 1;
-        console.log(obj.value);
     }
 </script>
 <script type="text/javascript" src="libs/index.js"></script>

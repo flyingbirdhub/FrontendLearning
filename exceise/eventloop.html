@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>JS 事件循环</title>
+</head>
+
+<body>
+<div id="outer" style="height: 200px;width: 200px; border: 1px solid red;">
+    外层
+    <div id="inner" style="margin: 50px; height: 100px; width: 100px; border: 1px solid black;">
+        内层
+        <span id="text" style="word-break: break-all; display: inline-block;"></span>
+    </div>
+</div>
+
+<script type="text/javascript">
+    let outer = document.getElementById("outer");
+    let inner = document.getElementById("inner");
+    let txt = document.getElementById("text");
+    outer.addEventListener("click", onClick("outer"));
+    inner.addEventListener("click", onClick("inner"))
+
+    new MutationObserver(function(){
+        console.log("mutate:"+outer.getAttribute("data-random"));
+    }).observe(outer, {
+        attributes: true
+    });
+
+    inner.click();
+
+    function onClick(type){
+        console.log("bind click for: "+type);
+        return function(){
+            console.log(type+":click");
+
+            setTimeout(function(){
+                console.log(type+": timeout");
+            }, 0);
+
+            Promise.resolve().then(function(){
+                console.log(type+": promise");
+            });
+
+            let content = type+":"+Math.random().toString();
+            console.log("content:"+content);
+            outer.setAttribute("data-random", content);
+            txt.innerText = content;
+        }
+    }
+</script>
+</body>
+</html>
